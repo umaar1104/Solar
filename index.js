@@ -9,7 +9,7 @@ const app = new App({
   socketMode: true
 });
 
-app.command("/supportbot-ping", async ({ command, ack, respond }) => {
+app.command("/novabot-ping", async ({ command, ack, respond }) => {
   const start = Date.now();
   await ack();
   const latency = Date.now() - start;
@@ -20,7 +20,7 @@ app.command("/supportbot-ping", async ({ command, ack, respond }) => {
   await app.start();
   console.log("bot is running!");
 })();
-app.command("/supportbot-catfact", async ({ ack, respond }) => {
+app.command("/novabot-catfact", async ({ ack, respond }) => {
   await ack();
 
   try {
@@ -30,7 +30,7 @@ app.command("/supportbot-catfact", async ({ ack, respond }) => {
     await respond({ text: "Failed to fetch a cat fact." });
   }
 });
-app.command("/supportbot-joke", async ({ ack, respond }) => {
+app.command("/novabot-joke", async ({ ack, respond }) => {
   await ack();
 
   try {
