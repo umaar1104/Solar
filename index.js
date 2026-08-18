@@ -112,3 +112,45 @@ app.command('/supportbot-help', async ({ ack, body, client, logger }) => {
     logger.error(error);
   }
 });
+// Kanalga yangi foydalanuvchi qo'shilganda ishlaydigan hodisa (Event)
+app.event('member_joined_channel', async ({ event, client, logger }) => {
+  try {
+    // Guruhga yangi qo'shilgan odamning ID-sini olamiz
+    const userId = event.user;
+    
+    // Yangi odamga bot nomidan to'g'ridan-to'g'ri shaxsiy xabar (DM) yuboramiz
+    await client.chat.postMessage({
+      channel: userId,
+      text: `Welcome to the workspace! 🎉`,
+      blocks: [
+        {
+          type: 'section',
+          text: {
+            type: 'mrkdwn',
+            text: `Hi <@${userId}>! Welcome to our team. 👋\n\nI am the *Support Bot*. If you ever face any technical issues or need help, just type the command below in any channel:`
+          }
+        },
+        {
+          type: 'section',
+          text: {
+            type: 'mrkdwn',
+            text: `👉 \`/supportbot-help\``
+          }
+        },
+        {
+          type: 'context',
+          elements: [
+            {
+              type: 'mrkdwn',
+              text: 'Have a great time here! 🚀'
+            }
+          ]
+        }
+      ]
+    });
+
+    logger.info(`Welcome message sent to user: ${userId}`);
+  } catch (error) {
+    logger.error(error);
+  }
+});
