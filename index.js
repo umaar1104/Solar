@@ -45,3 +45,70 @@ ${response.data.punchline}`
     await respond({ text: "Failed to fetch a joke." });
   }
 });
+app.command('/supportbot-help', async ({ ack, body, client, logger }) => {
+  await ack();
+
+  try {
+    const result = await client.views.open({
+      trigger_id: body.trigger_id,
+      view: {
+        type: 'modal',
+        // Bu ID o'zgarmaydi, shuning uchun app.view qismiga tegmaysiz
+        callback_id: 'help_request_modal_submit', 
+        title: {
+          type: 'plain_text',
+          text: 'Support Request'
+        },
+        blocks: [
+          {
+            type: 'input',
+            block_id: 'topic_block',
+            element: {
+              type: 'plain_text_input',
+              action_id: 'topic_input',
+              placeholder: { type: 'plain_text', text: 'e.g., Laptop issue, software access' }
+            },
+            label: { type: 'plain_text', text: 'Issue Topic' }
+          },
+          {
+            type: 'input',
+            block_id: 'urgency_block',
+            element: {
+              type: 'static_select',
+              action_id: 'urgency_input',
+              placeholder: { type: 'plain_text', text: 'Select urgency level' },
+              options: [
+                { text: { type: 'plain_text', text: 'Low - No rush' }, value: 'low' },
+                { text: { type: 'plain_text', text: 'Medium - Affects daily tasks' }, value: 'medium' },
+                { text: { type: 'plain_text', text: 'High - Blocker / Critical' }, value: 'high' }
+              ]
+            },
+            label: { type: 'plain_text', text: 'Urgency Level' }
+          },
+          {
+            type: 'input',
+            block_id: 'details_block',
+            element: {
+              type: 'plain_text_input',
+              multiline: true,
+              action_id: 'details_input',
+              placeholder: { type: 'plain_text', text: 'Please describe your problem in detail...' }
+            },
+            label: { type: 'plain_text', text: 'Description' }
+          }
+        ],
+        submit: {
+          type: 'plain_text',
+          text: 'Submit Ticket'
+        },
+        close: {
+          type: 'plain_text',
+          text: 'Cancel'
+        }
+      }
+    });
+    logger.info(result);
+  } catch (error) {
+    logger.error(error);
+  }
+});
